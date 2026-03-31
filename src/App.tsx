@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
-import Header from "./components/Header";
-import CardProduto from "./components/CardProduto";
-import FormularioProduto from "./components/FormularioProduto";
+import Header from "./components/Header.jsx";
+import CardProduto from "./components/CardProduto.jsx";
+import FormularioProduto from "./components/FormularioProduto.jsx";
 import {
   listarProdutos,
   listarCategorias,
   criarProduto,
   deletarProduto,
+  type Categoria,
+  type Produto,
+  type NovoProdutoPayload,
 } from "./api";
 
-
 function App() {
-  const [produtos, setProdutos] = useState([]);
-  const [categorias, setCategorias] = useState([]);
+  const [produtos, setProdutos] = useState<Produto[]>([]);
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState("");
 
@@ -38,13 +40,12 @@ function App() {
     }
   }
 
-  async function handleCriarProduto(dados) {
-    const novo = await criarProduto(dados);
-    // Recarrega a lista para pegar o produto com categoria_rel populado
+  async function handleCriarProduto(dados: NovoProdutoPayload) {
+    await criarProduto(dados);
     await carregarDados();
   }
 
-  async function handleDeletarProduto(id) {
+  async function handleDeletarProduto(id: number) {
     if (!window.confirm("Tem certeza que deseja remover este produto?")) return;
     try {
       await deletarProduto(id);

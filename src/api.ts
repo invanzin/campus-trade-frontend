@@ -1,5 +1,5 @@
 // URL base da API — mude para a URL do Azure em produção
-const API_URL = "http://localhost:8000";
+const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 export interface Categoria {
   id: number;
@@ -56,7 +56,9 @@ export async function listarProdutos(): Promise<Produto[]> {
   return response.json();
 }
 
-export async function criarProduto(dados: NovoProdutoPayload): Promise<Produto> {
+export async function criarProduto(
+  dados: NovoProdutoPayload,
+): Promise<Produto> {
   const response = await fetch(`${API_URL}/produtos`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
